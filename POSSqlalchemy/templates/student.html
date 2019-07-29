@@ -5,19 +5,24 @@
     <title>Student Infor</title>
 </head>
 <body>
+
          <form action = "/addstudent" method = "post">
-             <label for = "name">Name</label><br>
+             <label for = "name">Name</label>
              <input type = "text" name = "name" placeholder = "Name" /><br>
-             <label for = "email">City</label><br>
+             <label for = "email">City</label>
              <input type = "text" name = "city" placeholder = "city" /><br>
-             <label for = "addr">addr</label><br>
+             <label for = "addr">addr</label>
              <textarea name = "addr" placeholder = "addr"></textarea><br>
-             <label for = "PIN">City</label><br>
+             <label for = "PIN">City</label>
              <input type = "text" name = "pin" placeholder = "pin" /><br>
              <input type = "submit" value = "Submit" />
         </form>
         <h4>Student Lists</h4>
-
+         <form method="post" action="/search">
+              Search By :<input type="search" name="txt_search">
+              <input type = "submit" value = "Search" />
+         </form>
+        <br>
         <table border="1" rules="all" width="80%">
             <tr>
                 <td>ID</td>
@@ -37,7 +42,7 @@
                     <td>{{col.pin}}</td>
                     <td>
                         <a href="#">Edit</a>
-                        <a href="deleteuserid/{{col.id}}">Delete1</a>
+                        <a href="deleteuserid/{{col.id}}">Delete</a>
 
                     </td>
                 </tr>

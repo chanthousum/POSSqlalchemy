@@ -1,12 +1,29 @@
 from flask import Flask,render_template,request,session,flash,redirect,url_for
-from flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy,Model
 app=Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///students.sqlite3'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:1@localhost/sqlalchemy'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=True
+# app.config['SQLALCHEMY_BINDS']= {
+#     'users':        'mysql+pymysql://root:1@localhost/sqlalchemy',
+#  }#delete table and other
 app.config['SECRET_KEY'] = "random string"
-
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:1@localhost/sqlalchemy'
 db=SQLAlchemy(app)
-class students(db.Model):
+
+
+
+class products(db.Model):
+    producutid = db.Column('producutid', db.Integer, primary_key=True)
+    productname = db.Column(db.String(100))
+    categoryid = db.Column(db.Integer, db.ForeignKey('products.categoryid'), nullable=False)#one to many
+    def __init__(self, productname):
+        self.productname = productname
+
+class Categorys(db.Model):
+    categoryid = db.Column('categoryid', db.Integer, primary_key=True)
+    catetoryname = db.Column(db.String(100))
+
+class Students(db.Model):
     id = db.Column('student_id', db.Integer, primary_key=True)
     name = db.Column(db.String(100))
     city = db.Column(db.String(50))
@@ -17,18 +34,24 @@ class students(db.Model):
         self.city=city
         self.addr=addr
         self.pin=pin
+class Users(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+
 @app.route('/')
 def Index():
     db.create_all()
+    # db.create_all(bind=['users'])
     return render_template("home.html")
 
 @app.route('/student')
 def StudentList():
-    objstudent=students.query.all();
+    objstudent=Students.query.order_by(Students.name).limit(10).all()
     return render_template("student.html",student=objstudent)
 @app.route('/deleteuserid/<id>')
 def DeleteUserid(id):
-    objstudent = students.query.filter_by(id=id).first()
+    objstudent = Students.query.filter_by(id=id).first()
     db.session.delete(objstudent)
     db.session.commit();
     return redirect(url_for("StudentList"))
@@ -38,19 +61,27 @@ def DeleteUserid(id):
 def AddStudent():
     if request.method == 'POST':
         if not request.form['name'] or not request.form['city'] or not request.form['addr']:
-            flash('Please enter all the fields', 'error')
+                flash('Please enter all the fields', 'error')
         else:
-            o=students("","","","")
-            o.name=request.form['name'];
-            o.city=request.form['city']
-            o.addr=request.form['addr']
-            o.pin= request.form['pin']
-            student = students(o.name,o.city,o.addr,o.pin)
-            db.session.add(student)
+            objstudent=Students("", "", "", "")
+            objstudent.name=request.form['name'];
+            objstudent.city=request.form['city']
+            objstudent.addr=request.form['addr']
+            objstudent.pin= request.form['pin']
+            objstudent= Students(objstudent.name, objstudent.city, objstudent.addr, objstudent.pin)
+            db.session.add(objstudent)
             db.session.commit()
     return redirect(url_for("StudentList"))
 
 
+
+# @app.route('/search/',methods = ['GET', 'POST'])
+# def UserSearch():
+#     if request.method == 'POST':
+#         o = students("", "", "", "")
+#         o.name = request.form['txt_search'];
+#         objstudent=students.query.filter_by(name=name).first()
+#     return render_template("student.html",student=objstudent)
 
 
 
@@ -68,3 +99,6 @@ if __name__ == '__main__':
 
     # https: // flask - sqlalchemy.palletsprojects.com / en / 2.
     # x / queries /
+
+    # https: // virtualzero.net / blog / connect - a - flask - app - to - a - mysql - database -
+    # with-sqlalchemy - and -pymysql
