@@ -2,6 +2,9 @@
 from flask import Flask,render_template,request,session,flash,redirect,url_for
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from sqlalchemy import Column, Integer, String,Float,DateTime,ForeignKey,create_engine,func
+from sqlalchemy.orm import relationship,backref
+from sqlalchemy.ext.declarative import declarative_base
 # from POSSqlalchemy.Classes.Users import *
 app=Flask(__name__)
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///students.sqlite3'
@@ -38,28 +41,33 @@ class Students(db.Model):
         self.pin=pin
 
 class Users(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
+    __tablename__ = 'tblUser'
+    UserID = db.Column(db.Integer, primary_key=True)
+    UserName = db.Column(db.String(80))
+    Gender = db.Column(db.String(120))
+    DateOfBirth = db.Column(db.Date,)
+    Password = db.Column(db.String(120))
+    Description = db.Column(db.String(120))
+    Salary = db.Column(db.Float)
+    Phone = db.Column(db.String(120))
+    Active = db.Column(db.String(120))
+    # Position = db.Column(db.String(120),ForeignKey('tblPosition.Position'))#make relationship
+    Position = db.Column(db.String(120),ForeignKey('tblPosition.Position'),nullable=False)
+    # Position=relationship("Users", cascade="all, delete")
+    # Position = relationships("tblPosition", cascade="all,delete", backref="tblUser")
+    # Position=relationship("tblUser", cascade="save-update")
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    updated_at = db.Column(db.DateTime)
+class Positions(db.Model):
+    __tablename__ = 'tblPosition'
+    Position = db.Column(db.String(120), primary_key=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    updated_at = db.Column(db.DateTime)
 
 
 @app.route('/')
 def Index():
-    db.create_all()
+    # db.create_all()
     # db.create_all(bind=['users'])
     return render_template("home.html")
 @app.route('/student')
@@ -94,17 +102,6 @@ def UserSearch():
         objstudent.name = request.form['txt_search'];
         objstudent1=Students.query.filter_by(name=objstudent.name).all()
     return render_template("student.html",student=objstudent1)
-
-
-
-
-
-
-
-
-
-
-
 
 if __name__ == '__main__':
     app.run(debug=True,host="localhost",port=4000)

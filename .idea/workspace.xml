@@ -9,14 +9,17 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/POSSqlalchemy/index.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="174">
-              <caret line="33" column="37" selection-start-line="33" selection-start-column="37" selection-end-line="33" selection-end-column="37" />
+            <state relative-caret-position="1306">
+              <caret line="70" column="21" lean-forward="true" selection-start-line="70" selection-start-column="21" selection-end-line="70" selection-end-column="21" />
               <folding>
                 <element signature="e#1#79#0" expanded="true" />
+                <element signature="e#3419#3546#0" />
+                <element signature="e#3606#3761#0" />
+                <element signature="e#4563#4825#0" />
               </folding>
             </state>
           </provider>
@@ -46,10 +49,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="344" />
-    <option name="y" value="368" />
-    <option name="width" value="824" />
-    <option name="height" value="460" />
+    <option name="x" value="1340" />
+    <option name="y" value="200" />
+    <option name="width" value="850" />
+    <option name="height" value="715" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -74,6 +77,12 @@
               <item name="POSSqlalchemy" type="462c0819:PsiDirectoryNode" />
               <item name="POSSqlalchemy" type="462c0819:PsiDirectoryNode" />
               <item name="templates" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="POSSqlalchemy" type="b2602c69:ProjectViewProjectNode" />
+              <item name="POSSqlalchemy" type="462c0819:PsiDirectoryNode" />
+              <item name="POSSqlalchemy" type="462c0819:PsiDirectoryNode" />
+              <item name="venv" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -167,15 +176,15 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.21205357" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.21202114" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49867898" weight="0.21767594" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49867898" weight="0.27298445" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -205,13 +214,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://C:/Python34/Lib/site-packages/sqlalchemy/sql/schema.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="128">
-          <caret line="1448" selection-start-line="1448" selection-end-line="1448" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/POSSqlalchemy/Classes/Users.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="29">
@@ -222,12 +224,43 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://C:/Python34/Lib/site-packages/sqlalchemy/ext/declarative/clsregistry.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="236">
+          <caret line="128" selection-start-line="128" selection-end-line="128" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/POSSqlalchemy/venv/Scripts/pip-script.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="145">
+          <caret line="5" selection-start-line="5" selection-end-line="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Python34/Lib/site-packages/sqlalchemy/sql/schema.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="1626" column="6" selection-start-line="1626" selection-start-column="6" selection-end-line="1626" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Python34/Lib/site-packages/sqlalchemy/util/langhelpers.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="922" selection-start-line="922" selection-end-line="922" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/POSSqlalchemy/index.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="174">
-          <caret line="33" column="37" selection-start-line="33" selection-start-column="37" selection-end-line="33" selection-end-column="37" />
+        <state relative-caret-position="1306">
+          <caret line="70" column="21" lean-forward="true" selection-start-line="70" selection-start-column="21" selection-end-line="70" selection-end-column="21" />
           <folding>
             <element signature="e#1#79#0" expanded="true" />
+            <element signature="e#3419#3546#0" />
+            <element signature="e#3606#3761#0" />
+            <element signature="e#4563#4825#0" />
           </folding>
         </state>
       </provider>
