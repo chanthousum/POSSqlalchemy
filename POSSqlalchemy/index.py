@@ -1,7 +1,10 @@
 
-from flask import Flask,render_template,request,session,flash,redirect,url_for
+from flask import Flask, render_template, request, session, flash, redirect, url_for,jsonify,json
 from flask_sqlalchemy import SQLAlchemy
+from flask_marshmallow import Marshmallow
 from datetime import datetime
+from json import *
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy import Column, Integer, String,Float,DateTime,ForeignKey,create_engine,func
 from sqlalchemy.orm import relationship,backref
 from sqlalchemy.ext.declarative import declarative_base
@@ -16,30 +19,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=True
 #  }#delete table and other
 app.config['SECRET_KEY'] = "random string"
 db=SQLAlchemy(app)
-# class products(db.Model):
-#     producutid = db.Column('producutid', db.Integer, primary_key=True)
-#     productname = db.Column(db.String(100))
-#     categoryid = db.Column(db.Integer, db.ForeignKey('products.categoryid'), nullable=False)#one to many
-#     def __init__(self, productname):
-#         self.productname = productname
-# class Categorys(db.Model):
-#     categoryid = db.Column('categoryid', db.Integer, primary_key=True)
-#     catetoryname = db.Column(db.String(100))
-class Students(db.Model):
-    __tablename__ = 'tblstudent'
-    id = db.Column('student_id', db.Integer, primary_key=True)
-    name = db.Column(db.String(100))
-    city = db.Column(db.String(50))
-    addr = db.Column(db.String(200))
-    pin = db.Column(db.String(10))
-    created_at=db.Column(db.DateTime,default=datetime.utcnow,onupdate=datetime.utcnow)
-    updated_at=db.Column(db.DateTime)
-    def __init__(self,name,city,addr,pin):
-        self.name=name
-        self.city=city
-        self.addr=addr
-        self.pin=pin
-
 class Users(db.Model):
     __tablename__ = 'tblUser'
     UserID = db.Column(db.Integer, primary_key=True)
@@ -52,57 +31,84 @@ class Users(db.Model):
     Phone = db.Column(db.String(120))
     Active = db.Column(db.String(120))
     # Position = db.Column(db.String(120),ForeignKey('tblPosition.Position'))#make relationship
-    Position = db.Column(db.String(120),ForeignKey('tblPosition.Position'),nullable=False)
-    # Position=relationship("Users", cascade="all, delete")
-    # Position = relationships("tblPosition", cascade="all,delete", backref="tblUser")
-    # Position=relationship("tblUser", cascade="save-update")
+    PositionID = db.Column(db.Integer,db.ForeignKey('tblPosition.PositionID'),nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     updated_at = db.Column(db.DateTime)
 class Positions(db.Model):
     __tablename__ = 'tblPosition'
-    Position = db.Column(db.String(120), primary_key=True)
+    PositionID=db.Column(db.Integer, primary_key=True)
+    PositionName = db.Column(db.String(120))
     created_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     updated_at = db.Column(db.DateTime)
 
-
 @app.route('/')
 def Index():
-    # db.create_all()
-    # db.create_all(bind=['users'])
+    db.create_all()
     return render_template("home.html")
-@app.route('/student')
-def StudentList():
-    objstudent=Students.query.order_by(Students.name).limit(10).all()
-    return render_template("student.html",student=objstudent)
-@app.route('/deleteuserid/<id>')
-def DeleteUserid(id):
-    objstudent = Students.query.filter_by(id=id).first()
-    db.session.delete(objstudent)
-    db.session.commit();
-    return redirect(url_for("StudentList"))
-@app.route('/addstudent',methods = ['GET', 'POST'])
-def AddStudent():
-    if request.method == 'POST':
-        if not request.form['name'] or not request.form['city'] or not request.form['addr']:
-                flash('Please enter all the fields', 'error')
-        else:
-            objstudent=Students("", "", "", "")
-            objstudent.name=request.form['name'];
-            objstudent.city=request.form['city']
-            objstudent.addr=request.form['addr']
-            objstudent.pin= request.form['pin']
-            objstudent= Students(objstudent.name, objstudent.city, objstudent.addr, objstudent.pin)
-            db.session.add(objstudent)
-            db.session.commit()
-    return redirect(url_for("StudentList"))
 @app.route('/search',methods = ['GET', 'POST'])
 def UserSearch():
     if request.method == 'POST':
         objstudent=Students("", "", "", "")
         objstudent.name = request.form['txt_search'];
         objstudent1=Students.query.filter_by(name=objstudent.name).all()
-    return render_template("student.html",student=objstudent1)
+    return render_template("adduser.html",student=objstudent1)
+    
+@app.route('/AddUser',methods = ['POST'])
+def AddUser():
+    if request.method == 'POST':
+        objUser = Users()
+        objUser.UserName = request.json['UserName']
+        objUser.Gender=request.json['Gender']
+        objUser.PositionID = request.json['PositionID']
+        db.session.add(objUser)
+        db.session.commit()
+        msg_json = {'message': 'User Created'}
+    return jsonify(msg_json)
 
+@app.route('/AddUser1')
+def AddUser1():
+    return  render_template("adduser.html")
+
+@app.route('/GetUserAll',methods=['GET'])
+def GetUserAll():
+    # objUser=Users.query.order_by(Users.UserName).limit(10).all()
+    if request.method=="GET":
+        objUser = Users.query.all()
+        output=[]
+    #     for col in objUser:
+    #         dict={}
+    #         dict['UserID']=col.UserID
+    #         dict['UserName'] = col.UserName
+    #         output.append(dict)
+    # return jsonify(output)
+        return objUser.json()
+
+@app.route('/GetByone/<id>',methods=['GET'])
+def GetByone(id):
+    if request.method=="GET":
+        objUser=Users.query.filter_by(UserID=id).all()
+        output=[]
+        for col in objUser:
+            dict={}
+            dict['UserID']=col.UserID
+            dict['UserName'] = col.UserName
+            dict['Gender'] = col.Gender
+            output.append(dict)
+    return jsonify(output)
+
+@app.route('/AddPosition',methods=['POST'])
+def AddPosition():
+    if request.method == 'POST':
+        objPosition=Positions()
+        objPosition.PositionName=request.json['PositionName']
+        db.session.add(objPosition)
+        db.session.commit()
+        msg_json={'message':'Position Created'}
+    return jsonify(msg_json)
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template("404.html"),404
 if __name__ == '__main__':
     app.run(debug=True,host="localhost",port=4000)
 
@@ -114,3 +120,5 @@ if __name__ == '__main__':
 
     # https: // realpython.com / flask - by - example - part - 2 - postgres - sqlalchemy - and -alembic /
     # https: // realpython.com / flask - connexion - rest - api - part - 2 /
+    # https: // medium.com / python - pandemonium / build - simple - restful - api -
+    # with-python - and -flask - part - 2 - 724ebf04d12
