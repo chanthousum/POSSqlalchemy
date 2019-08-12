@@ -40,19 +40,29 @@ class Positions(db.Model):
     PositionName = db.Column(db.String(120))
     created_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     updated_at = db.Column(db.DateTime)
+@app.route('/login',methods=['POST'])
+def Login():
+    error=None
+    if request.method=="POST":
+        objUser1=Users()
+        objUser1.UserName=request.form['txt_username']
+        objUser1.Password = request.form['txt_password']
+        objUser=Users.query.filter_by(UserName=objUser1.UserName,Password=objUser1.Password).first()
+        if objUser in None:
+            error = "Username and Password is invalid"
+            return render_template("login_frm.html", error=error)
+        else:
+            return render_template("index.html")
 
 @app.route('/')
 def Index():
-    db.create_all()
-    return render_template("home.html")
-@app.route('/search',methods = ['GET', 'POST'])
-def UserSearch():
-    if request.method == 'POST':
-        objstudent=Students("", "", "", "")
-        objstudent.name = request.form['txt_search'];
-        objstudent1=Students.query.filter_by(name=objstudent.name).all()
-    return render_template("adduser.html",student=objstudent1)
-    
+    # db.create_all()
+    return render_template("index.html")
+@app.route('/userlist')
+def UserList():
+
+    return render_template("users/userlist.html",userlist=userlist)
+
 @app.route('/AddUser',methods = ['POST'])
 def AddUser():
     if request.method == 'POST':
@@ -64,11 +74,6 @@ def AddUser():
         db.session.commit()
         msg_json = {'message': 'User Created'}
     return jsonify(msg_json)
-
-@app.route('/AddUser1')
-def AddUser1():
-    return  render_template("adduser.html")
-
 @app.route('/GetUserAll',methods=['GET'])
 def GetUserAll():
     # objUser=Users.query.order_by(Users.UserName).limit(10).all()

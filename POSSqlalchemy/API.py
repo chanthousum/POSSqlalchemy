@@ -2,7 +2,6 @@ from flask import Flask,json,jsonify,request
 from flask_restful import Resource,Api,reqparse
 from flask_sqlalchemy import SQLAlchemy
 from POSSqlalchemy.Classes.User import *
-
 app=Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI']='postgresql://postgres:chanthou123@localhost:5432/API_DB'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=True
