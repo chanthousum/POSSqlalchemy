@@ -1,0 +1,167 @@
+{% extends "index.html" %}
+{% block content %}
+<div class="content-wrapper" style="min-height: 946px;">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+           Edit User Information
+            <small>Preview</small>
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li><a href="#">Forms</a></li>
+            <li class="active">General Elements</li>
+          </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+          <div class="row">
+            <!-- left column -->
+            <div class="col-md-12">
+              <!-- general form elements -->
+              <div class="box box-primary">
+                <div class="box-header with-border">
+                  <h3 class="box-title"><a href="/adduser"><span class="glyphicon glyphicon-plus" style="color:green;">Add User</span></a></h3>
+                </div><!-- /.box-header -->
+
+                <!-- form start -->
+                    <div style="margin:10px;">
+                        {% for col in users %}
+                        <form action="/userupdate/{{col.0}}"  method="post">
+                             <div class="row">
+                                 <div class="col-md-6">
+                                     <div class="form-group">
+                                         <label>Username :</label>
+                                         <input type="text" name="txt_username" value="{{col.1}}" class="form-control" required>
+                                     </div>
+                                 </div>
+                                 <div class="col-md-6">
+                                     <div class="form-group">
+                                        <label class="control-label">Gender :</label>
+                                        <select class="form-control" name="ddlgender" required>
+                                            {% if col.2=="Female" %}
+                                            <option value="Male">Male</option>
+                                            <option value="{{col.2}}" selected>{{col.2}}</option>
+                                            {%else%}
+                                            <option value="{{col.2}}" selected>{{col.2}}</option>
+                                            <option value="Female">Female</option>
+                                            {% endif %}
+                                        </select>
+
+                                     </div>
+                                 </div>
+                             </div>
+                             <div class="row">
+                                 <div class="col-md-6">
+                                     <div class="form-group">
+                                         <label class="control-label">Date Of Birth :</label>
+                                         <input type="date" name="txt_date" value="{{col.3}}" class="form-control" required>
+                                     </div>
+                                 </div>
+                                 <div class="col-md-6">
+                                     <div class="form-group">
+                                        <label class="control-label">Password :</label>
+                                        <input type="password" name="txt_password"  value="{{col.4}}" class="form-control" required>
+                                     </div>
+                                 </div>
+                             </div>
+                             <div class="row">
+                                 <div class="col-md-6">
+                                     <div class="form-group">
+                                         <label class="control-label">Description :</label>
+                                         <input type="text" name="txt_description"  value="{{col.5}}" class="form-control" required>
+
+                                     </div>
+                                 </div>
+                                 <div class="col-md-6">
+                                     <div class="form-group">
+                                        <label class="control-label">Salary :</label>
+                                        <input type="text" name="txt_salary" value="{{col.6}}" class="form-control" required>
+
+                                     </div>
+                                 </div>
+                             </div>
+                             <div class="row">
+                                 <div class="col-md-6">
+                                     <div class="form-group">
+                                         <label class="control-label">Phone :</label>
+                                         <input type="text" name="txt_phone" value="{{col.6}}" class="form-control"required>
+
+                                     </div>
+                                 </div>
+                                 <div class="col-md-6">
+                                     <div class="form-group">
+                                        <label class="control-label">Active :</label>
+                                       <select class="form-control" name="ddlactive" required>
+                                           {% if col.8=="Active"%}
+                                            <option value="{{col.8}}" selected>{{col.8}}</option>
+                                           <option value="Inactive">Inactive</option>
+                                           {% else %}
+                                           <option value="Active">Active</option>
+                                             <option value="{{col.8}}" selected>{{col.8}}</option>
+                                           {% endif %}
+
+                                       </select>
+
+                                     </div>
+                                 </div>
+                             </div>
+                             <div class="row">
+                                 <div class="col-md-6">
+                                     <div class="form-group">
+                                         <label class="control-label">Position :</label>
+                                         <select class="form-control" name="ddlposition" required>
+                                           <option value="">Select Position</option>
+                                           {% for col1 in position %}
+                                                {% if col1.0==col.9 %}
+                                                <option value="{{ col1.0 }}" selected>{{ col1.0 }}</option>
+                                                {% else %}
+                                                <option value="{{ col1.0 }}">{{ col1.0 }}</option>
+                                                {% endif %}
+                                           {% endfor %}
+                                       </select>
+
+                                     </div>
+                                 </div>
+                                 <div class="col-md-6">
+                                     <div class="form-group">
+                                        <label class="control-label">Photo :</label>
+                                        <input type="file"  class="form-control">
+
+                                     </div>
+                                 </div>
+                             </div>
+                             <div class="row">
+                                 <div class="col-md-6">
+                                     <div class="form-group">
+                                        <input type="submit" value="Updae" name="btn_name"  class="btn btn-primary">
+                                        {% with messages = get_flashed_messages() %}
+                                           {% if messages %}
+                                              {% for message in messages %}
+                                                <span style="color:green;">{{ message }}</span>
+                                              {% endfor %}
+                                           {% endif %}
+                                        {% endwith %}
+
+                                     </div>
+                                 </div>
+                             </div>
+                        </form>
+                        {% endfor %}
+                    </div>
+
+
+
+
+
+              </div><!-- /.box -->
+
+            </div><!--/.col (left) -->
+            <!-- right column -->
+
+          </div>   <!-- /.row -->
+        </section><!-- /.content -->
+      </div>
+{% endblock %}
+
