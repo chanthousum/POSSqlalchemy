@@ -40,27 +40,34 @@ class Positions(db.Model):
     PositionName = db.Column(db.String(120))
     created_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     updated_at = db.Column(db.DateTime)
+
 @app.route('/login',methods=['POST'])
 def Login():
-    return render_template("login_frm.html")
-    error=None
-    if request.method=="POST":
-        # objUser1=Users()
-        # objUser1.UserName=request.form['txt_username']
-        # objUser1.Password = request.form['txt_password']
-        objUser = Users.query.all()
-        for col in objUser:
-            print(col.UserName)
-        return render_template("login_frm.html",userlists=objUser)
-app.add_url_rule("/","login",Login)
+    try:
+        error = None
+        if request.method == "POST":
+            objUser = Users()
+            objUser.UserName = request.form['txt_username']
+            # objUser.Password = request.form['txt_password']
+            objUser = Users.query.filter_by(UserName=objUser.UserName).first()
+            session['username']=objUser.UserName
+            return render_template("index.html",username= session['username'])
+    except Exception as ex:
+        return render_template("Error.html",errre_message=ex)
+@app.route('/logout')
+def LogOut():
+    session.pop('username',None)
+    return redirect(url_for("Index"))
 @app.route('/home')
 def Index():
     # db.create_all()
-    return render_template("index.html")
+   return render_template("login_frm.html")
+app.add_url_rule("/","home",Index)
 @app.route('/userlist',methods=['GET'])
 def UserList():
     userlist=Users.query.order_by(Users.UserName).all()
     return render_template("users/userlist.html",userlists=userlist)
+
 @app.route('/adduser')
 def AddUser():
     position=Positions.query.all()
@@ -104,9 +111,9 @@ def UserUpdate(id):
     return redirect("/useredit/"+id+"")
 @app.route('/useredit/<id>',methods=['GET'])
 def UserEdit(id):
-    userlist=Users.query.filter_by(UserID=id).first()
+    userlist=Users.query.filter_by(UserID=id).all()
     position = Positions.query.all()
-    return render_template("users/edituser_frm.html",userlists=userlist,positions=position)
+    return render_template("users/edituser_frm.html",userlists=userlist,positions=position,username=session['username'])
 @app.route('/userdelete/<id>',methods=['GET'])
 def UserDelete(id):
     objUser=Users.query.filter_by(UserID=id).first()
@@ -129,7 +136,7 @@ def page_not_found(e):
 
 
 if __name__ == '__main__':
-    app.run(debug=False,host="localhost",port=4000)
+    app.run(debug=True,host="localhost",port=4000)
 
     # https: // flask - sqlalchemy.palletsprojects.com / en / 2.
     # x / queries /
@@ -141,3 +148,5 @@ if __name__ == '__main__':
     # https: // realpython.com / flask - connexion - rest - api - part - 2 /
     # https: // medium.com / python - pandemonium / build - simple - restful - api -
     # with-python - and -flask - part - 2 - 724ebf04d12d
+    # https: // freecoursesite.com /?s = Web + API + Development +
+    # with+Flask
