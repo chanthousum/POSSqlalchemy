@@ -41,12 +41,12 @@
             {% for row in userlists %}
             <tbody>
                 <tr>
-                    <td>{{row.0}}</td>
-                    <td>{{ row.1}}</td>
-                    <td>{{ row.2}}</td>
+                    <td>{{row.UserID}}</td>
+                    <td>{{ row.UserName}}</td>
+                    <td>{{ row.Gender}}</td>
                     <td align="center">
-                        <a href="/edituser/{{row.0}}"><span class="glyphicon glyphicon-pencil">Edit</span></a>&nbsp;&nbsp;&nbsp;
-                        <a href="/deleteuser/{{row.0}}"> <span class="glyphicon glyphicon-trash" style="color:red;">Delete</span></a>
+                        <a href="/useredit/{{row.UserID}}"><span class="glyphicon glyphicon-pencil">Edit</span></a>&nbsp;&nbsp;&nbsp;
+                        <a href="/userdelete/{{row.UserID}}"> <span class="glyphicon glyphicon-trash" style="color:red;">Delete</span></a>
                     </td>
 
                 </tr>

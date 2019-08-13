@@ -100,8 +100,8 @@
                              <label class="control-label">Position :</label>
                              <select class="form-control" name="ddlposition" required>
                                <option value="">Select Position</option>
-                               {% for row in position %}
-                                    <option value="{{ row.0 }}">{{ row.0 }}</option>
+                               {% for row in positions %}
+                                    <option value="{{ row.PositionID }}">{{ row.PositionName }}</option>
                                {% endfor %}
                            </select>
 

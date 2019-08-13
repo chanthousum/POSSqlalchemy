@@ -27,24 +27,24 @@
 
                 <!-- form start -->
                     <div style="margin:10px;">
-                        {% for col in users %}
-                        <form action="/userupdate/{{col.0}}"  method="post">
+                        {% for col in userlists %}
+                        <form action="/userupdate/{{col.UserID}}"  method="post">
                              <div class="row">
                                  <div class="col-md-6">
                                      <div class="form-group">
                                          <label>Username :</label>
-                                         <input type="text" name="txt_username" value="{{col.1}}" class="form-control" required>
+                                         <input type="text" name="txt_username" value="{{col.UserName}}" class="form-control" required>
                                      </div>
                                  </div>
                                  <div class="col-md-6">
                                      <div class="form-group">
                                         <label class="control-label">Gender :</label>
                                         <select class="form-control" name="ddlgender" required>
-                                            {% if col.2=="Female" %}
+                                            {% if col.Gender=="Female" %}
                                             <option value="Male">Male</option>
-                                            <option value="{{col.2}}" selected>{{col.2}}</option>
+                                            <option value="{{col.Gender}}" selected>{{col.Gender}}</option>
                                             {%else%}
-                                            <option value="{{col.2}}" selected>{{col.2}}</option>
+                                            <option value="{{col.Gender}}" selected>{{col.Gender}}</option>
                                             <option value="Female">Female</option>
                                             {% endif %}
                                         </select>
@@ -56,13 +56,13 @@
                                  <div class="col-md-6">
                                      <div class="form-group">
                                          <label class="control-label">Date Of Birth :</label>
-                                         <input type="date" name="txt_date" value="{{col.3}}" class="form-control" required>
+                                         <input type="date" name="txt_date" value="{{col.DateOfBirth}}" class="form-control" required>
                                      </div>
                                  </div>
                                  <div class="col-md-6">
                                      <div class="form-group">
                                         <label class="control-label">Password :</label>
-                                        <input type="password" name="txt_password"  value="{{col.4}}" class="form-control" required>
+                                        <input type="password" name="txt_password"  value="{{col.Password}}" class="form-control" required>
                                      </div>
                                  </div>
                              </div>
@@ -70,14 +70,14 @@
                                  <div class="col-md-6">
                                      <div class="form-group">
                                          <label class="control-label">Description :</label>
-                                         <input type="text" name="txt_description"  value="{{col.5}}" class="form-control" required>
+                                         <input type="text" name="txt_description"  value="{{col.Description}}" class="form-control" required>
 
                                      </div>
                                  </div>
                                  <div class="col-md-6">
                                      <div class="form-group">
                                         <label class="control-label">Salary :</label>
-                                        <input type="text" name="txt_salary" value="{{col.6}}" class="form-control" required>
+                                        <input type="text" name="txt_salary" value="{{col.Salary}}" class="form-control" required>
 
                                      </div>
                                  </div>
@@ -86,7 +86,7 @@
                                  <div class="col-md-6">
                                      <div class="form-group">
                                          <label class="control-label">Phone :</label>
-                                         <input type="text" name="txt_phone" value="{{col.6}}" class="form-control"required>
+                                         <input type="text" name="txt_phone" value="{{col.Phone}}" class="form-control"required>
 
                                      </div>
                                  </div>
@@ -94,12 +94,12 @@
                                      <div class="form-group">
                                         <label class="control-label">Active :</label>
                                        <select class="form-control" name="ddlactive" required>
-                                           {% if col.8=="Active"%}
-                                            <option value="{{col.8}}" selected>{{col.8}}</option>
+                                           {% if col.Active=="Active"%}
+                                            <option value="{{col.Active}}" selected>{{col.Active}}</option>
                                            <option value="Inactive">Inactive</option>
                                            {% else %}
                                            <option value="Active">Active</option>
-                                             <option value="{{col.8}}" selected>{{col.8}}</option>
+                                             <option value="{{col.Active}}" selected>{{col.Active}}</option>
                                            {% endif %}
 
                                        </select>
@@ -113,11 +113,11 @@
                                          <label class="control-label">Position :</label>
                                          <select class="form-control" name="ddlposition" required>
                                            <option value="">Select Position</option>
-                                           {% for col1 in position %}
-                                                {% if col1.0==col.9 %}
-                                                <option value="{{ col1.0 }}" selected>{{ col1.0 }}</option>
+                                           {% for col1 in positions %}
+                                                {% if col1.PositionID==col.PositionID %}
+                                                <option value="{{ col1.PositionID }}" selected>{{ col1.PositionName }}</option>
                                                 {% else %}
-                                                <option value="{{ col1.0 }}">{{ col1.0 }}</option>
+                                                 <option value="{{ col1.PositionID }}">{{ col1.PositionName }}</option>
                                                 {% endif %}
                                            {% endfor %}
                                        </select>
