@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Login</title><meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+<body style="background-color:gray;">
+<div class="col-md-12">
+	<div class="row" style="margin:auto;max-width:400px;">
+    	<form data-toggle="validator" method="post" class="form-horizontal" action="/login">
+            <div class="modal-header" style="margin-top:10px;">System Security</div>
+            <div class="form-group" style="margin-top:10px;">
+                <div class="col-md-8">
+                    <input type="text" name="txt_username" class="form-control" placeholder="Username" required/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-8">
+                    <input type="password" name="txt_password" class="form-control" placeholder="Password" required/>
+                </div>
+
+            </div>
+            	<input type="submit" value="Log In" name="btnlogin" class="btn btn-success"/>
+             {% if error %}
+                 <spanp style="color:red;"> {{ error }}</spanp>
+            {% endif %}
+
+<!--            {% with messages = get_flashed_messages() %}-->
+<!--               {% if messages %}-->
+<!--                  {% for message in messages %}-->
+<!--                    <span style="color:green;">{{ message }}</span>-->
+<!--                  {% endfor %}-->
+<!--               {% endif %}-->
+<!--            {% endwith %}-->
+        </form>
+    </div>
+
+</div>
+{% for col in userlists %}
+{{col.UserName}}
+{% endfor %}
+
+</body>
+</html>
