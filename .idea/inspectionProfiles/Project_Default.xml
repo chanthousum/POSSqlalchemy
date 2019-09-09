@@ -5,6 +5,8 @@
       <option name="ignoredIdentifiers">
         <list>
           <option value="POSSqlalchemy.index.*" />
+          <option value="POSSqlalchemy.API.flask_restful" />
+          <option value="POSSqlalchemy.API.flask_sqlalchemy" />
         </list>
       </option>
     </inspection_tool>
