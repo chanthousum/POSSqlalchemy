@@ -1,14 +1,9 @@
-
 from flask import Flask, render_template, request, session, flash, redirect, url_for,jsonify,json
 from flask_sqlalchemy import SQLAlchemy
-from flask_marshmallow import Marshmallow
 from datetime import datetime
-from json import *
-from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy import Column, Integer, String,Float,DateTime,ForeignKey,create_engine,func
-from sqlalchemy.orm import relationship,backref
-from sqlalchemy.ext.declarative import declarative_base
-# from POSSqlalchemy.Classes.Users import *
+# from sqlalchemy import Column, Integer, String,Float,DateTime,ForeignKey,create_engine,func
+# from sqlalchemy.orm import relationship,backref
+# from sqlalchemy.ext.declarative import declarative_base
 app=Flask(__name__)
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///students.sqlite3'
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:1@localhost/sqlalchemy'
@@ -48,21 +43,27 @@ def Login():
         if request.method == "POST":
             objUser = Users()
             objUser.UserName = request.form['txt_username']
-            # objUser.Password = request.form['txt_password']
-            objUser = Users.query.filter_by(UserName=objUser.UserName).first()
-            session['username']=objUser.UserName
-            return render_template("index.html",username= session['username'])
+            objUser.Password = request.form['txt_password']
+            objUser = Users.query.filter_by(UserName=objUser.UserName,Password=objUser.Password).first()
+            if not objUser:
+                error="Username and Password is invalid"
+                return render_template("login_frm.html",error=error)
+            else:
+                session['username']=objUser.UserName
+                return render_template("index.html",username= session['username'])
     except Exception as ex:
         return render_template("Error.html",errre_message=ex)
+
 @app.route('/logout')
 def LogOut():
     session.pop('username',None)
     return redirect(url_for("Index"))
 @app.route('/home')
 def Index():
-    # db.create_all()
+   db.create_all()
    return render_template("login_frm.html")
 app.add_url_rule("/","home",Index)
+
 @app.route('/userlist',methods=['GET'])
 def UserList():
     userlist=Users.query.order_by(Users.UserName).all()
@@ -72,6 +73,7 @@ def UserList():
 def AddUser():
     position=Positions.query.all()
     return render_template("users/adduser_frm.html",positions=position)
+
 @app.route('/usercreate',methods=['POST'])
 def Save():
     try:
@@ -92,34 +94,42 @@ def Save():
         return redirect(url_for("AddUser"))
     except Exception as ex:
         return render_template("Error.html",errre_message=ex)
+
 @app.route('/userupdate/<id>',methods=['POST'])
 def UserUpdate(id):
-    if request.method=="POST":
-        objUser=Users.query.filter_by(UserID=id).first()#get one record
-        objUser.UserName=request.form['txt_username']
-        objUser.Gender = request.form['ddlgender']
-        objUser.DateOfBirth = request.form['txt_date']
-        objUser.Password = request.form['txt_password']
-        objUser.Description = request.form['txt_description']
-        objUser.Salary = request.form['txt_salary']
-        objUser.Phone = request.form['txt_phone']
-        objUser.Active = request.form['ddlactive']
-        objUser.PositionID = request.form['ddlposition']
-        db.session.add(objUser)
-        db.session.commit()
-        flash("Updated User")
-    return redirect("/useredit/"+id+"")
+    try:
+        if request.method == "POST":
+            objUser = Users.query.filter_by(UserID=id).first()  # get one record
+            objUser.UserName = request.form['txt_username']
+            objUser.Gender = request.form['ddlgender']
+            objUser.DateOfBirth = request.form['txt_date']
+            objUser.Password = request.form['txt_password']
+            objUser.Description = request.form['txt_description']
+            objUser.Salary = request.form['txt_salary']
+            objUser.Phone = request.form['txt_phone']
+            objUser.Active = request.form['ddlactive']
+            objUser.PositionID = request.form['ddlposition']
+            db.session.add(objUser)
+            db.session.commit()
+            flash("Updated User")
+        return redirect("/useredit/" + id + "")
+    except Exception as ex:
+        return render_template("Error.html", errre_message=ex)
+
+
 @app.route('/useredit/<id>',methods=['GET'])
 def UserEdit(id):
     userlist=Users.query.filter_by(UserID=id).all()
     position = Positions.query.all()
     return render_template("users/edituser_frm.html",userlists=userlist,positions=position,username=session['username'])
+
 @app.route('/userdelete/<id>',methods=['GET'])
 def UserDelete(id):
     objUser=Users.query.filter_by(UserID=id).first()
     db.session.delete(objUser)
     db.session.commit()
     return redirect(url_for("UserList"))
+
 @app.route('/AddPosition',methods=['POST'])
 def AddPosition():
     if request.method == 'POST':
@@ -129,6 +139,7 @@ def AddPosition():
         db.session.commit()
         msg_json={'message':'Position Created'}
     return jsonify(msg_json)
+
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template("404.html"),404
