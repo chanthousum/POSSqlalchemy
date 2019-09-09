@@ -1,0 +1,70 @@
+{% extends "index.html" %}
+{% block content %}
+<div class="content-wrapper" style="min-height: 946px;">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+           User Information
+            <small>Preview</small>
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li><a href="#">Forms</a></li>
+            <li class="active">General Elements</li>
+          </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+          <div class="row">
+            <!-- left column -->
+            <div class="col-md-12">
+              <!-- general form elements -->
+              <div class="box box-primary">
+                <div class="box-header with-border">
+                  <h3 class="box-title"><a href="/AddPostionForm"><span class="glyphicon glyphicon-plus" style="color:green;">Add Position</span></a></h3>
+                </div><!-- /.box-header -->
+
+                <!-- form start -->
+
+                    <div class="table-responsive">
+
+        <table class="table">
+            <thead style="background-color:#3c8dbc;">
+                <tr>
+                    <th>ID</th>
+                    <th>Position Name</th>
+                    <th style="text-align:center;">Actoin</th>
+                </tr>
+            </thead>
+            {% for row in positionlists %}
+            <tbody>
+                <tr>
+                    <td>{{row.PositionID}}</td>
+                    <td>{{ row.PositionName}}</td>
+                    <td align="center">
+                        <a href="/PositionEdit/{{row.PositionID}}"><span class="glyphicon glyphicon-pencil">Edit</span></a>&nbsp;&nbsp;&nbsp;
+                        <a href="/userdelete/{{row.PositionID}}"> <span class="glyphicon glyphicon-trash" style="color:red;">Delete</span></a>
+                    </td>
+
+                </tr>
+            </tbody>
+            {% endfor %}
+        </table>
+    </div>
+
+
+
+
+              </div><!-- /.box -->
+
+            </div><!--/.col (left) -->
+            <!-- right column -->
+
+          </div>   <!-- /.row -->
+        </section><!-- /.content -->
+      </div>
+
+
+
+{% endblock %}

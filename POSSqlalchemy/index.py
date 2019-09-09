@@ -109,6 +109,7 @@ def UserUpdate(id):
             objUser.Phone = request.form['txt_phone']
             objUser.Active = request.form['ddlactive']
             objUser.PositionID = request.form['ddlposition']
+            objUser.updated_at=datetime.now()
             db.session.add(objUser)
             db.session.commit()
             flash("Updated User")
@@ -130,15 +131,43 @@ def UserDelete(id):
     db.session.commit()
     return redirect(url_for("UserList"))
 
-@app.route('/AddPosition',methods=['POST'])
-def AddPosition():
+# ==========================================Position
+@app.route('/SavePosition',methods=['POST'])
+def SavePosition():
     if request.method == 'POST':
         objPosition=Positions()
-        objPosition.PositionName=request.json['PositionName']
+        objPosition.PositionName=request.form['txt_position_name']
         db.session.add(objPosition)
         db.session.commit()
-        msg_json={'message':'Position Created'}
-    return jsonify(msg_json)
+        flash("Created Position")
+    return redirect(url_for("AddPostionForm"))
+
+@app.route('/UpdatePosition/<id>',methods=['POST'])
+def UpdatePosition(id):
+    if request.method == 'POST':
+        objPosition=Positions.query.filter_by(PositionID=id).first()
+        objPosition.PositionName=request.form['txt_position_name']
+        db.session.add(objPosition)
+        db.session.commit()
+        flash("Position Updated")
+    return redirect("/PositionEdit/"+id +"")
+
+@app.route('/AddPostionForm')
+def AddPostionForm():
+    return render_template("users/add_position_frm.html")
+@app.route('/positionlist')
+def PositionList():
+    positionlist = Positions.query.all()
+    return render_template("users/position_list.html", positionlists=positionlist,username=session['username'])
+
+@app.route('/PositionEdit/<id>',methods=['GET'])
+def PositionEdit(id):
+    positionlist=Positions.query.filter_by(PositionID=id).all()
+    return render_template("users/edit_position_frm.html",positionlists=positionlist,username=session['username'])
+
+
+
+
 
 @app.errorhandler(404)
 def page_not_found(e):
