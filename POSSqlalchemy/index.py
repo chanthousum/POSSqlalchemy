@@ -176,7 +176,7 @@ def page_not_found(e):
 
 
 if __name__ == '__main__':
-    app.run(debug=True,host="localhost",port=4000)
+    app.run(debug=False,host="localhost",port=5000)
 
     # https: // flask - sqlalchemy.palletsprojects.com / en / 2.
     # x / queries /
