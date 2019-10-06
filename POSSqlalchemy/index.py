@@ -44,12 +44,14 @@ def Login():
             objUser = Users()
             objUser.UserName = request.form['txt_username']
             objUser.Password = request.form['txt_password']
-            objUser = Users.query.filter_by(UserName=objUser.UserName,Password=objUser.Password).first()
+            # objUser = Users.query.filter_by(UserName=objUser.UserName,Password=objUser.Password).first()
+            objUser=db.session.query(Users.UserName,Users.Password,Positions.PositionID,Positions.PositionName).filter(Users.PositionID==Positions.PositionID).filter_by(UserName=objUser.UserName,Password=objUser.Password).first()
             if not objUser:
                 error="Username and Password is invalid"
                 return render_template("login_frm.html",error=error)
             else:
                 session['username']=objUser.UserName
+                session['PositionName'] = objUser.PositionName
                 return render_template("index.html",username= session['username'])
     except Exception as ex:
         return render_template("Error.html",errre_message=ex)
@@ -66,7 +68,8 @@ app.add_url_rule("/","home",Index)
 
 @app.route('/userlist',methods=['GET'])
 def UserList():
-    userlist=Users.query.order_by(Users.UserName).all()
+    # userlist=Users.query.order_by(Users.UserName).all()
+    userlist=db.session.query(Users.UserID,Users.UserName,Users.Gender,Positions.PositionName).filter(Users.PositionID==Positions.PositionID)#get data by file table
     return render_template("users/userlist.html",userlists=userlist)
 
 @app.route('/adduser')
@@ -112,8 +115,12 @@ def UserUpdate(id):
             objUser.updated_at=datetime.now()
             db.session.add(objUser)
             db.session.commit()
-            flash("Updated User")
-        return redirect("/useredit/" + id + "")
+            if db.session.has_object(objUser):
+                flash("Updated User")
+                return redirect("/useredit/" + id + "")
+
+
+
     except Exception as ex:
         return render_template("Error.html", errre_message=ex)
 
@@ -176,7 +183,7 @@ def page_not_found(e):
 
 
 if __name__ == '__main__':
-    app.run(debug=False,host="localhost",port=5000)
+    app.run(debug=True,host="localhost",port=5000)
 
     # https: // flask - sqlalchemy.palletsprojects.com / en / 2.
     # x / queries /
