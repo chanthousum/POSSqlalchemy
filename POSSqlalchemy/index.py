@@ -52,7 +52,7 @@ def Login():
             else:
                 session['username']=objUser.UserName
                 session['PositionName'] = objUser.PositionName
-                return render_template("index.html",username= session['username'])
+                return render_template("index.html",username= session['username'],PositionName=session['PositionName'])
     except Exception as ex:
         return render_template("Error.html",errre_message=ex)
 
